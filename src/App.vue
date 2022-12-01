@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <ColumnarDigram></ColumnarDigram>
+    <CircularDigram />
   </div>
 </template>
 
 <script>
-import ColumnarDigram from "./components/columnarDigram.vue";
+import CircularDigram from "./components/circularDigram.vue";
 
 export default {
   name: "App",
   components: {
-    ColumnarDigram,
+    CircularDigram,
   },
 };
 </script>
@@ -23,5 +23,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  width: 100%;
+  height: 100%;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
 }
 </style>
