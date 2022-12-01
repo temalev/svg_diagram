@@ -10,18 +10,25 @@
       height="100%"
       style="background-color: white; border: solid 1px black"
     >
-      <rect
-        v-for="(column, id) in newArr"
+      <g
+        :style="{
+          transform: `translateX(${id * (100 / columns.length)}%)`,
+        }"
+        v-for="(column, id) in columns"
         :key="id"
-        :width="`${100 / newArr.length}%`"
-        :height="`${column}%`"
-        :x="`${id * (100 / newArr.length)}%`"
-        :y="`${100 - column}%`"
-        @click="position"
-        rx="1"
-      />
+        class="block"
+      >
+        <rect
+          v-for="(col, idCol) in column"
+          :key="col.val"
+          :width="`${40 / columns.length}%`"
+          :height="`${1 + 95 * ((col.val - min) / (max - min))}%`"
+          :x="`${idCol * (42 / columns.length)}%`"
+          :y="`${100 - (1 + 95 * ((col.val - min) / (max - min)))}%`"
+          rx="1"
+        />
+      </g>
     </svg>
-    {{ newArr }}
   </div>
 </template>
 <script>
@@ -30,40 +37,57 @@ export default {
   data() {
     return {
       columns: [
-        { value: 100 },
-        { value: 200 },
-        { value: 230 },
-        { value: 120 },
-        { value: 111 },
-        { value: 100 },
-        { value: 200 },
-        { value: 230 },
-        { value: 400 },
-        { value: 800 },
-        { value: 930 },
-        { value: 1000 },
-        { value: 200 },
-        { value: 630 },
-        { value: 800 },
-        { value: 600 },
-        { value: 530 },
+        [{ val: 400 }, { val: 390 }],
+        [{ val: 700 }, { val: 590 }],
+        [{ val: 300 }, { val: 890 }],
+        [{ val: 400 }, { val: 390 }],
+        [{ val: 700 }, { val: 590 }],
+        [{ val: 300 }, { val: 1890 }],
+        [{ val: 700 }, { val: 590 }],
+        [{ val: 300 }, { val: 890 }],
+        [{ val: 400 }, { val: 390 }],
+        [{ val: 700 }, { val: 590 }],
+        [{ val: 300 }, { val: 890 }],
+        [{ val: 400 }, { val: 390 }],
       ],
       newColumns: [],
     };
   },
   computed: {
-    newArr() {
-      const data = this.columns.map((el) => el.value);
-      console.log(data);
-      const max = Math.max(...data);
-      const min = Math.min(...data);
-      const newData = data.map((el) => 1 + 95 * ((el - min) / (max - min)));
-      return newData;
+    min() {
+      return Math.min(
+        ...this.columns.reduce(
+          (acc, col) => [...acc, Math.min(...col.map(({ val }) => val))],
+          []
+        )
+      );
     },
+    max() {
+      return Math.max(
+        ...this.columns.reduce(
+          (acc, col) => [...acc, Math.max(...col.map(({ val }) => val))],
+          []
+        )
+      );
+    },
+    // newArr() {
+    //   const data = this.columns.map((el) => el.val);
+    //   console.log(data);
+    //   const max = this.columns.reduce(
+    //     (acc, col) => [...acc, Math.max(...col.map(({ val }) => val))],
+    //     []
+    //   );
+    //   const min = this.columns.reduce(
+    //     (acc, col) => [...acc, Math.min(...col.map(({ val }) => val))],
+    //     []
+    //   );
+    //   const newData = data.map((el) => 1 + 95 * ((el - min) / (max - min)));
+    //   return newData;
+    // },
   },
   methods: {
-    position(event) {
-      console.log(event.y);
+    position(options) {
+      console.log(options);
     },
   },
 };
@@ -75,6 +99,9 @@ export default {
 }
 .svg {
   overflow-x: scroll;
+}
+.block {
+  background-color: #0d243ca4;
 }
 rect {
   fill: #1d7218;
